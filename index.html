@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BANCOCHAIN — La banca del futuro, hoy</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#050816; --navy:#0A1931; --card:#0c2144cc;
+  --cyan:#00E6F6; --blue:#2E7CF6; --gold:#FFC300; --violet:#7B2FFF; --pink:#FF3DF2;
+  --txt:#EDF2FF; --muted:#A9BAD6;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);color:var(--txt);overflow:hidden;height:100vh}
+#stars{position:fixed;inset:0;z-index:0}
+.grid-bg{position:fixed;inset:0;z-index:0;opacity:.25;
+  background-image:linear-gradient(rgba(0,230,246,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(0,230,246,.12) 1px,transparent 1px);
+  background-size:56px 56px;
+  mask-image:radial-gradient(ellipse 90% 80% at 50% 40%,black 30%,transparent 75%);
+}
+.blob{position:fixed;border-radius:50%;filter:blur(110px);z-index:0;opacity:.55;animation:float 10s ease-in-out infinite alternate}
+.b1{width:560px;height:560px;background:#1238ff66;top:-160px;left:-120px}
+.b2{width:520px;height:520px;background:#00e6f655;bottom:-180px;right:-100px;animation-delay:-4s}
+.b3{width:420px;height:420px;background:#7b2fff55;top:30%;left:55%;animation-delay:-7s}
+@keyframes float{to{transform:translate(40px,50px) scale(1.1)}}
+/* top bar */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:16px 28px;
+  background:linear-gradient(180deg,rgba(5,8,22,.9),transparent);backdrop-filter:blur(6px)}
+.logo{display:flex;align-items:center;gap:12px;font-family:Orbitron;font-weight:900;letter-spacing:2px;font-size:18px}
+.logo-mark{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-size:22px;
+  background:linear-gradient(135deg,var(--cyan),var(--blue) 60%,var(--violet));box-shadow:0 0 24px #00e6f688}
+.pill{font-size:12px;letter-spacing:1.5px;color:var(--cyan);border:1px solid #00e6f655;padding:7px 14px;border-radius:100px;background:#00e6f611}
+.counter{font-family:Orbitron;font-size:13px;color:var(--muted);letter-spacing:2px}
+.counter b{color:var(--gold);font-size:16px}
+/* deck */
+.deck{position:relative;z-index:5;height:100vh;width:100vw}
+.slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:90px 56px 110px;opacity:0;transform:translateX(80px) scale(.98);pointer-events:none;transition:all .6s cubic-bezier(.2,.9,.25,1)}
+.slide.active{opacity:1;transform:none;pointer-events:auto}
+.wrap{max-width:1180px;width:100%}
+.kicker{color:var(--cyan);font-weight:800;letter-spacing:3px;font-size:13px;margin-bottom:12px}
+.kicker i{color:var(--gold);font-style:normal;margin-right:10px}
+h1.hero{font-family:Orbitron;font-size:clamp(56px,8vw,104px);line-height:.95;font-weight:900;
+  background:linear-gradient(92deg,#fff 10%,var(--cyan) 45%,var(--blue) 70%,var(--violet) 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 30px #00e6f644)}
+h2.title{font-family:Orbitron;font-size:clamp(30px,4.2vw,54px);line-height:1.05;font-weight:800}
+h2.title span{background:linear-gradient(90deg,var(--gold),#fff2b0);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--muted);font-size:clamp(15px,1.7vw,19px);line-height:1.6;margin-top:12px;max-width:720px}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:36px;align-items:center}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.chip{font-size:13px;font-weight:700;padding:9px 16px;border-radius:100px;border:1px solid #ffffff22;background:#ffffff0d;backdrop-filter:blur(8px)}
+.chip.c{border-color:#00e6f677;color:var(--cyan)} .chip.g{border-color:#ffc30077;color:var(--gold)} .chip.v{border-color:#7b2fff77;color:#c4a6ff}
+.btnrow{display:flex;gap:14px;margin-top:26px}
+.btn{font-weight:800;padding:14px 28px;border-radius:14px;border:0;cursor:pointer;font-size:15px;transition:.25s}
+.btn-gold{background:linear-gradient(135deg,var(--gold),#ff8a00);color:#1a1000;box-shadow:0 10px 30px #ffc30055}
+.btn-gold:hover{transform:translateY(-3px);box-shadow:0 16px 40px #ffc30077}
+.btn-ghost{background:#ffffff10;color:#fff;border:1px solid #ffffff2e}
+/* holo card */
+.holo{background:linear-gradient(160deg,#0e2a63ee,#0a1030ee);border:1px solid #00e6f633;border-radius:24px;padding:28px;position:relative;overflow:hidden;box-shadow:0 30px 80px #0009,0 0 40px #00e6f622}
+.holo::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--cyan),var(--blue),var(--violet),var(--pink))}
+.chain{display:flex;align-items:center;gap:8px;margin:18px 0}
+.blk{flex:1;background:#060d22;border:1px solid #00e6f644;border-radius:12px;padding:10px;text-align:center;font-family:Orbitron;font-size:12px}
+.blk small{display:block;color:var(--cyan);font-size:10px;margin-top:4px;font-family:'Plus Jakarta Sans'}
+.link{color:var(--cyan);font-weight:900}
+.mini{display:flex;justify-content:space-between;background:#ffffff0a;border-radius:12px;padding:10px 14px;margin-top:8px;font-size:13px}
+/* cards grid */
+.cards4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:28px}
+.cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:28px}
+.cards5{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:26px}
+.card{background:linear-gradient(180deg,#10295bee,#0a1430ee);border:1px solid #ffffff18;border-radius:20px;padding:22px 20px;position:relative;overflow:hidden;transition:.3s;min-height:210px}
+.card:hover{transform:translateY(-8px);border-color:var(--cyan);box-shadow:0 20px 50px #00e6f633}
+.card::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--cyan),var(--violet))}
+.card .em{font-size:34px}
+.card h3{font-size:16px;margin:12px 0 8px;color:var(--gold);letter-spacing:.3px}
+.card p{font-size:13.5px;line-height:1.6;color:#D4DFF5}
+.card .num{font-family:Orbitron;font-size:28px;color:var(--cyan)}
+/* timeline */
+.timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:28px;position:relative}
+.step{background:#0b1e44ee;border:1px solid #2e7cf655;border-radius:18px;padding:20px 16px;text-align:center;position:relative}
+.step b{display:inline-grid;place-items:center;width:44px;height:44px;border-radius:50%;font-family:Orbitron;margin-bottom:10px;
+  background:linear-gradient(135deg,var(--cyan),var(--blue));color:#02131a;box-shadow:0 0 20px #00e6f677}
+.step h4{font-size:14px;color:var(--gold);margin-bottom:8px;letter-spacing:1px}
+.step p{font-size:12.5px;color:#cdd8f0;line-height:1.55}
+/* controls */
+.controls{position:fixed;bottom:0;left:0;right:0;z-index:20;padding:18px 28px;display:flex;align-items:center;justify-content:space-between;
+  background:linear-gradient(0deg,rgba(5,8,22,.95),transparent)}
+.dots{display:flex;gap:9px}
+.dot{width:34px;height:6px;border-radius:100px;background:#ffffff22;cursor:pointer;transition:.3s;border:0}
+.dot.on{background:linear-gradient(90deg,var(--cyan),var(--gold));box-shadow:0 0 12px #00e6f6aa;width:48px}
+.nav{display:flex;gap:10px}
+.nbtn{width:52px;height:52px;border-radius:50%;border:1px solid #ffffff2c;background:#ffffff0e;color:#fff;font-size:20px;cursor:pointer;transition:.25s;backdrop-filter:blur(8px)}
+.nbtn:hover{background:var(--cyan);color:#02131a;box-shadow:0 0 24px var(--cyan)}
+.progress{position:fixed;top:0;left:0;height:4px;z-index:30;background:linear-gradient(90deg,var(--cyan),var(--blue),var(--violet),var(--gold));width:12.5%;transition:.5s;box-shadow:0 0 12px var(--cyan)}
+.hint{font-size:12px;color:var(--muted);letter-spacing:1px}
+.consensus{display:flex;gap:14px;margin-top:24px}
+.node{flex:1;background:#0b1e44;border:1px solid #00ff8844;border-radius:16px;padding:16px;text-align:center}
+.node.off{border-color:#ff4d6d66;opacity:.75}
+.node .st{font-weight:900;font-size:13px}
+.ok{color:#00ff88}.bad{color:#ff4d6d}
+.big-demo{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:24px;align-items:stretch}
+.demo-list{display:flex;flex-direction:column;gap:12px}
+.demo-item{background:#ffffff0c;border:1px solid #ffffff1e;border-radius:14px;padding:15px 18px;font-weight:700;display:flex;gap:12px;align-items:center}
+.demo-item span.n{background:var(--gold);color:#111;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-family:Orbitron;flex-shrink:0}
+.cta-big{background:linear-gradient(135deg,var(--gold),#ff7a00 60%,#ff3d81);border-radius:24px;padding:32px;text-align:center;color:#1a0e00;box-shadow:0 20px 60px #ffc30055;animation:pulse 2.4s infinite}
+@keyframes pulse{50%{transform:scale(1.02)}}
+.cta-big h3{font-family:Orbitron;font-size:30px}
+.def{background:#00e6f611;border:1px dashed #00e6f655;border-radius:10px;padding:8px 10px;margin-top:10px;font-size:12px;line-height:1.55;color:#EAF2FF}
+.def b{color:var(--cyan)}
+code.mono{font-family:Consolas,monospace;font-size:11.5px;background:#060d22;border:1px solid #ffffff22;border-radius:8px;padding:3px 7px;color:var(--gold);display:inline-block;margin-top:8px;word-break:break-all}
+.formula{font-family:Orbitron;font-size:11px;color:var(--cyan);background:#02131a;border-radius:8px;padding:7px 9px;margin-top:8px;line-height:1.5}
+.tag{display:inline-block;font-size:10px;font-weight:800;letter-spacing:1px;padding:4px 10px;border-radius:100px;margin-bottom:2px}
+.tag.sha{background:#00e6f622;color:var(--cyan);border:1px solid #00e6f655}
+.tag.merk{background:#7b2fff33;color:#c4a6ff;border:1px solid #7b2fff66}
+.tag.ed{background:#ffc30022;color:var(--gold);border:1px solid #ffc30066}
+.tag.pow{background:#ff3df222;color:#ff8ccf;border:1px solid #ff3df255}
+.tag.arg{background:#00ff8822;color:#00ff88;border:1px solid #00ff8866}
+.tag.aes{background:#2e7cf633;color:#8db9ff;border:1px solid #2e7cf666}
+.pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:22px}
+.pillar{background:linear-gradient(180deg,#122c62ee,#0a1430ee);border:1px solid #ffffff1c;border-radius:16px;padding:16px;text-align:center}
+.pillar .em{font-size:30px}.pillar h4{color:var(--gold);font-size:13px;margin:8px 0 6px;letter-spacing:.5px}.pillar p{font-size:12px;color:#D4DFF5;line-height:1.55}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
+.vs{background:#ffffff0a;border:1px solid #ffffff1e;border-radius:16px;padding:16px 18px;font-size:13px;line-height:1.7}
+.vs.old{border-color:#ff4d6d55}.vs.new{border-color:#00ff8855;box-shadow:0 0 24px #00ff8822}
+.vs h4{font-family:Orbitron;font-size:13px;letter-spacing:1px;margin-bottom:8px}
+.bc-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:24px;margin-top:22px;align-items:start}
+.bc-book{background:linear-gradient(160deg,#0e2a63ee,#0a1030ee);border:1px solid #ffc30055;border-radius:20px;padding:22px}
+.bc-book h3{font-family:Orbitron;color:var(--gold);font-size:16px;margin-bottom:10px}
+.bc-book p{font-size:13.5px;line-height:1.65;color:#EAF2FF}
+@media(max-width:950px){
+  body{overflow:auto}.deck{height:auto}.slide{position:relative;opacity:1;transform:none;pointer-events:auto;padding:100px 20px 40px;display:none}
+  .slide.active{display:flex}.hero-grid,.big-demo{grid-template-columns:1fr}.cards4,.cards3,.cards5,.timeline{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){.cards4,.cards3,.cards5,.timeline{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+<div class="grid-bg"></div>
+<div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+<div class="progress" id="prog"></div>
+
+<div class="topbar">
+  <div class="logo"><div class="logo-mark">🏦</div> BANCOCHAIN <span style="color:var(--cyan)">⛓</span></div>
+  <div class="pill">BANCA + BLOCKCHAIN • DINERO FICTICIO GTQ • PROYECTO EDUCATIVO</div>
+  <div class="counter"><b id="cur">01</b> / <span id="tot">09</span></div>
+</div>
+
+<div class="deck" id="deck">
+
+<!-- 1 PORTADA -->
+<section class="slide active"><div class="wrap"><div class="hero-grid">
+<div>
+  <div class="kicker"><i>●</i>PROYECTO CHAPÍN • JAVA + REACT • BLOCKCHAIN PRIVADA</div>
+  <h1 class="hero">BANCO<br>CHAIN</h1>
+  <p class="sub" style="font-size:22px;color:#fff;font-weight:800;margin-top:14px">La banca del futuro, hoy.</p>
+  <p class="sub">Tu dinero es ficticio, pero tu seguridad es real. Transfiere, explora y hackea — sin romper nada.</p>
+  <div class="chips"><span class="chip c">⚡ Backend Java 21</span><span class="chip v">⚛️ Frontend React</span><span class="chip g">🐘 PostgreSQL</span><span class="chip c">⛓️ 3 Nodos</span></div>
+  <div class="btnrow"><button class="btn btn-gold" onclick="go(1)">▶ Empezar tour</button><button class="btn btn-ghost" onclick="go(8)">🎬 Ir a la demo</button></div>
+</div>
+<div class="holo">
+  <div style="font-family:Orbitron;letter-spacing:2px;color:var(--gold)">🏦 ⛓ BANCO EN VIVO</div>
+  <div class="chain"><div class="blk">#0<small>GÉNESIS 0000</small></div><div class="link">→</div><div class="blk">#1<small>Q500 ✓</small></div><div class="link">→</div><div class="blk">#2<small>Q1,200 ✓</small></div><div class="link">→</div><div class="blk" style="border-color:var(--gold)">#3<small>NUEVO ✨</small></div></div>
+  <div class="mini"><span>🟢 Cadena válida</span><b style="color:var(--gold)">Bloque #157</b></div>
+  <div class="mini"><span>🗳️ Consenso</span><b style="color:#00ff88">3/3 REACHED</b></div>
+  <div class="mini"><span>🔐 Firma Ed25519</span><b style="color:var(--cyan)">Verificada ✓</b></div>
+  <div class="mini"><span>👥 Saldo total demo</span><b>Q 9,000.00</b></div>
+</div>
+</div></div></section>
+
+<!-- 2 QUE ES -->
+<section class="slide"><div class="wrap">
+<div class="kicker"><i>●</i>01 • ¿QUÉ ES BANCOCHAIN?</div>
+<h2 class="title">No es un banco. Es tu <span>laboratorio de dinero.</span></h2>
+<p class="sub">BancoChain es una app bancaria educativa: NO usa dinero real, NO es criptomoneda. Sirve para aprender cómo un banco + blockchain protegen tu plata.</p>
+<div class="cards4">
+<div class="card"><div class="em">🎓</div><h3>¿PARA QUÉ ES?</h3><p>Para estudiantes y curiosos: entender banca digital, seguridad y blockchain privada sin riesgo. Perfecta para clases y expos.</p></div>
+<div class="card"><div class="em">🏦</div><h3>¿QUÉ SIMULA?</h3><p>Usuarios, cuentas en quetzales, transferencias, saldos, historial, tarjetas y pagos ficticios. Todo como un banco real.</p></div>
+<div class="card"><div class="em">⛓️</div><h3>¿QUÉ LO HACE ÚNICO?</h3><p>Cada transferencia se sella en bloques privados y 3 guardianes votan si es válida. Nada se puede borrar ni alterar.</p></div>
+<div class="card"><div class="em">🚀</div><h3>¿POR QUÉ IMPORTA?</h3><p>El fraude digital crece en GT. Aquí aprendes cómo la tecnología evita trampas, duplicados y hackeos.</p></div>
+</div></div></section>
+
+<!-- 2B QUE ES BLOCKCHAIN -->
+<section class="slide"><div class="wrap">
+<div class="kicker"><i>●</i>02 • ¿QUÉ ES BLOCKCHAIN? — EL TEMA CENTRAL</div>
+<h2 class="title">El libro contable <span>que nadie puede borrar. 📖⛓️</span></h2>
+<p class="sub"><b style="color:#fff">Definición simple:</b> una cadena de bloques donde cada bloque guarda transacciones + su huella + la huella del anterior. Si alteras uno, rompes toda la cadena. Por eso es <b style="color:var(--gold)">inmutable, transparente y confiable sin intermediarios.</b></p>
+<div class="bc-grid">
+<div>
+<div class="pillars" style="grid-template-columns:repeat(2,1fr);margin-top:0">
+<div class="pillar"><div class="em">🔒</div><h4>INMUTABLE</h4><p>Nadie puede editar ni borrar. Solo agregar. Ideal contra fraudes.</p></div>
+<div class="pillar"><div class="em">🌐</div><h4>DESCENTRALIZADA</h4><p>No hay un solo jefe. Varias copias en nodos. Si uno falla, los demás siguen.</p></div>
+<div class="pillar"><div class="em">👁️</div><h4>TRANSPARENTE</h4><p>Todos pueden verificar hashes y firmas. Nada escondido.</p></div>
+<div class="pillar"><div class="em">🤝</div><h4>SIN INTERMEDIARIOS</h4><p>El consenso (voto 2/3) reemplaza al notario. Código = confianza.</p></div>
+</div>
+<div class="compare">
+<div class="vs old"><h4 style="color:#ff8ca3">🏦 BANCO TRADICIONAL</h4>❌ Un servidor central<br>❌ El admin puede editar<br>❌ Confías a ciegas<br>❌ Si se cae, todo se cae</div>
+<div class="vs new"><h4 style="color:#00ff88">⛓️ BLOCKCHAIN</h4>✅ Copias en 3 nodos<br>✅ Inmutable + firmada<br>✅ Verificable por todos<br>✅ Resiste caídas 2/3</div>
+</div>
+</div>
+<div class="bc-book">
+<h3>📚 ¿PARA QUÉ SIRVE? (TEMA COMPLETO)</h3>
+<p>💰 <b>Banca:</b> transferencias auditables sin doble-gasto.<br>📦 <b>Trazabilidad:</b> seguir café, medicinas o títulos.<br>🗳️ <b>Votos y diplomas:</b> imposibles de falsificar.<br>🎮 <b>Videojuegos y arte NFT:</b> propiedad digital real.</p>
+<div class="def"><b>BancoChain usa blockchain PRIVADA educativa:</b> no es Bitcoin público ni gasta luz minera. Es local, rápida y perfecta para aprender. Cada Q500 de José → María queda sellado para siempre. <b>Pública</b> = todos entran (Bitcoin). <b>Privada</b> = solo invitados (nosotros).</div>
+<code class="mono">Bloque #5: prev=9f2c… + txs(10) + merkle=a1b2… + nonce → hash=0000c3d4… ✓</code>
+</div>
+</div></div></section>
+
+<!-- 3 QUE HACE -->
+<section class="slide"><div class="wrap">
+<div class="kicker"><i>●</i>03 • ¿QUÉ HACE?</div>
+<h2 class="title">Todo lo de tu banco, <span>pero más chilero.</span></h2>
+<p class="sub">Desde tu compu o celu: crea tu cuenta, manda plata, paga, revisa tu historia y espía la blockchain.</p>
+<div class="cards4">
+<div class="card"><div class="em">💸</div><h3>TRANSFIERE EN GTQ</h3><p>Manda Q1 a Q10,000 por envío, hasta Q50,000 al día. Valida saldo, evita auto-envíos y duplicados solo.</p></div>
+<div class="card"><div class="em">👛</div><h3>CUENTAS Y TARJETAS</h3><p>Crea cuentas, consulta saldos al instante, tarjetas y pagos demo. Dashboard con “Hola + saldo total”.</p></div>
+<div class="card"><div class="em">🔍</div><h3>EXPLORA TODO</h3><p>Historial paginado, detalle de cada envío, explorador de bloques, estado de nodos y auditoría completa.</p></div>
+<div class="card"><div class="em">👤</div><h3>TU PERFIL SEGURO</h3><p>Login JWT 15 min + refresh 7 días, claves Argon2id, roles CUSTOMER / ADMIN. Nadie ve tu clave.</p></div>
+</div></div></section>
+
+<!-- 4 COMO FUNCIONA -->
+<section class="slide"><div class="wrap">
+<div class="kicker"><i>●</i>04 • ¿CÓMO FUNCIONA?</div>
+<h2 class="title">De tu clic al bloque <span>en 5 pasos.</span></h2>
+<p class="sub">Tú pides, el banco verifica, la blockchain sella y los 3 guardianes confirman. Así de fácil.</p>
+<div class="timeline">
+<div class="step"><b>1</b><h4>TÚ PIDES</h4><p>En React eliges origen, destino y monto. Un clic en Transferir. Fácil como mandar WhatsApp.</p></div>
+<div class="step"><b>2</b><h4>BANCO VERIFICA</h4><p>Java revisa: ¿activa? ¿saldo? ¿límite? Si falla te avisa y lo guarda en auditoría.</p></div>
+<div class="step"><b>3</b><h4>SE FIRMA</h4><p>Firma Ed25519 + hash SHA-256 + número anti-copia. Tu envío ya es infalsificable.</p></div>
+<div class="step"><b>4</b><h4>SE SELLA</h4><p>Entra a la fila, se junta en bloque con Merkle Root y se mina buscando el 0000 mágico.</p></div>
+<div class="step"><b>5</b><h4>SE CONFIRMA</h4><p>3 nodos votan, con 2 de 3 basta. Bloque guardado. ¡Lo ves en el explorador!</p></div>
+</div></div></section>
+
+<!-- 5 MAGIA -->
+<section class="slide"><div class="wrap">
+<div class="kicker"><i>●</i>05 • LA MAGIA BLOCKCHAIN — DEFINICIONES CLAVE</div>
+<h2 class="title">Un cofre con <span>4 candados imposibles.</span></h2>
+<p class="sub">Aquí sí entendemos la magia: qué es cada algoritmo, para qué sirve y cómo lo usa BancoChain. Lenguaje simple, nivel alto.</p>
+<div class="cards4">
+<div class="card"><span class="tag sha">SHA-256 • HASH</span><div class="num">🔗</div><h3>HUELLA DIGITAL</h3><p><b>Definición:</b> Función criptográfica que convierte cualquier texto en una huella única de 64 letras y números. Es de un solo sentido: no se puede revertir.</p><div class="def"><b>En BancoChain:</b> <code>hash = SHA256(indice + fecha + hashAnterior + merkleRoot + nonce + validador)</code>. Si cambias Q500 → Q501, el hash cambia por completo.</div><code class="mono">“Hola” → 185f8db3… • “Hola!” → 334d016f…</code></div>
+<div class="card"><span class="tag merk">MERKLE TREE • RESUMEN</span><div class="num">🌳</div><h3>EL ÁRBOL QUE VIGILA</h3><p><b>Definición:</b> Árbol binario que resume 10 transacciones en 1 solo código llamado <b>Merkle Root</b>. Cada hoja es el hash de una transacción.</p><div class="def"><b>En BancoChain:</b> padre = SHA256(hijoIzq + hijoDer). Si una hoja cambia, la raíz cambia y el bloque queda inválido al instante.</div><div class="formula">TX1 TX2 TX3 TX4 → H12 H34 → ROOT ✓</div></div>
+<div class="card"><span class="tag ed">Ed25519 • FIRMA DIGITAL</span><div class="num">✍️</div><h3>TU SELLO INCOPIABLE</h3><p><b>Definición:</b> Algoritmo de firma de curva elíptica de 256 bits. Prueba que TÚ autorizaste sin revelar tu clave privada. Más rápido y seguro que RSA.</p><div class="def"><b>En BancoChain:</b> firmas con tu clave privada, todos verifican con tu clave pública. Clave privada guardada con <b>AES-256-GCM</b>, nunca viaja por internet.</div><code class="mono">firmar(clavePriv, datos) → verificar(clavePub) ✓/✗</code></div>
+<div class="card"><span class="tag pow">NONCE + PoW • MINERÍA</span><div class="num">⛏️</div><h3>LA ADIVINANZA MÁGICA</h3><p><b>Definición:</b> <b>Nonce</b> = número que se prueba una y otra vez. <b>PoW</b> = hay que trabajar para hallar un hash que empiece con <b>0000</b>. Cuesta crearlo, fácil verificarlo.</p><div class="def"><b>En BancoChain:</b> se mina cada bloque incrementando el nonce. Además el nonce es <b>anti-replay</b>: no se puede reutilizar una transacción vieja.</div><div class="formula">nonce=0…42137 → hash=0000a9f3… ✓ BLOQUE VÁLIDO</div></div>
+</div></div></section>
+
+<!-- 6 SEGURIDAD -->
+<section class="slide"><div class="wrap">
+<div class="kicker"><i>●</i>06 • SEGURIDAD Y CONFIANZA — ALGORITMOS REALES</div>
+<h2 class="title">3 guardianes <span>que no se duermen.</span></h2>
+<p class="sub">BancoChain usa seguridad de nivel banco real. Aquí qué significa cada algoritmo en palabras simples.</p>
+<div class="cards4">
+<div class="card"><span class="tag arg">Argon2id • CLAVES</span><div class="em">🔑</div><h3>TUS CONTRASEÑAS</h3><p><b>Definición:</b> Ganador del concurso mundial de hashing. Convierte tu contraseña en código irreconocible, con memoria y tiempo anti-fuerza bruta.</p><div class="def"><b>En BancoChain:</b> TestPass123! nunca se guarda. Se guarda su hash Argon2id. Ni el admin puede verla.</div></div>
+<div class="card"><span class="tag aes">AES-GCM + PBKDF2</span><div class="em">🔒</div><h3>COFRE DE LLAVES</h3><p><b>Definición:</b> <b>AES-256-GCM</b> cifra tu clave privada Ed25519. <b>PBKDF2</b> (100k vueltas) crea la llave del cofre desde tu secreto + sal.</p><div class="def"><b>En BancoChain:</b> tabla user_key_pairs guarda solo la clave cifrada. Sin la llave, es basura inútil para un hacker.</div></div>
+<div class="card"><span class="tag sha">JWT • SESIONES</span><div class="em">🎫</div><h3>TU PASE VIP</h3><p><b>Definición:</b> <b>JWT</b> = pase firmado con 3 partes. Access 15 min + Refresh 7 días con rotación. Si expira o se roba, se invalida.</p><div class="def"><b>En BancoChain:</b> cada petición lleva <code>Bearer token</code>. Roles: CUSTOMER mira, BLOCKCHAIN_ADMIN toca el lab.</div></div>
+<div class="card"><span class="tag ed">CONSENSO 2/3 + AUDITORÍA</span><div class="em">🛡️</div><h3>VOTO Y CÁMARAS</h3><p><b>Definición:</b> <b>Consenso</b> = mayoría de validadores aprueba. <b>Auditoría</b> = cámara que graba LOGIN, TRANSFER, BLOCK, LAB_TAMPER.</p><div class="def"><b>En BancoChain:</b> NODE-01/02/03 votan. Con 2 de 3 basta. Todo queda en audit_logs, nunca claves ni tokens.</div></div>
+</div>
+<div class="consensus">
+<div class="node"><div style="font-size:24px">🖥️</div><b>NODE-01</b><div class="st ok">● ONLINE ✓ vota SÍ</div></div>
+<div class="node"><div style="font-size:24px">🖥️</div><b>NODE-02</b><div class="st ok">● ONLINE ✓ vota SÍ</div></div>
+<div class="node off"><div style="font-size:24px">💤</div><b>NODE-03</b><div class="st bad">● OFFLINE ✗ → igual 2/3 CONSENSO OK</div></div>
+</div></div></section>
+
+<!-- 7 LAB -->
+<section class="slide"><div class="wrap">
+<div class="kicker"><i>●</i>07 • LABORATORIO + PRUEBAS</div>
+<h2 class="title">Aprende a hackear, <span>sin ir a la cárcel. 😎</span></h2>
+<p class="sub">Lo más divertido: rompe una copia, mira cómo la cadena se derrumba en cascada y restaura todo en 1 clic.</p>
+<div class="cards4">
+<div class="card"><div class="em">🧪</div><h3>LAB AISLADO</h3><p>Solo ADMIN. Copia la cadena real, cambia el bloque 50 y mira errores en cascada. ¡La trampa se ve!</p></div>
+<div class="card"><div class="em">✅</div><h3>12 PRUEBAS AUTO</h3><p>Hash, firmas, replay-attack, bloque alterado, consenso, caída de nodo. Botón EJECUTAR TODAS.</p></div>
+<div class="card"><div class="em">🖥️</div><h3>PANTALLAS CHILERAS</h3><p>Explorador, detalle con prev/next hash, nodos con barra %, auditoría con filtros, simulación y examen.</p></div>
+<div class="card"><div class="em">💡</div><h3>STACK PRO</h3><p>Java 21 + Spring Boot + Postgres + Docker. React + Vite + Axios. Todo arranca con 1 comando.</p></div>
+</div></div></section>
+
+<!-- 8 CIERRE -->
+<section class="slide"><div class="wrap">
+<div class="kicker"><i>●</i>08 • CIERRE + DEMO EN VIVO</div>
+<h2 class="title" style="font-weight:400;color:var(--muted);font-size:32px">Y ahora...</h2>
+<h2 class="title" style="font-size:clamp(40px,5.5vw,68px)">¡Vamos a verlo <span>en vivo! 🎬</span></h2>
+<p class="sub">De la teoría a la pantalla. Ahora se explicará el programa paso a paso frente a ustedes.</p>
+<div class="big-demo">
+<div class="demo-list">
+<div class="demo-item"><span class="n">1</span> 🔑 Login como admin@bancochain.test</div>
+<div class="demo-item"><span class="n">2</span> 💸 Transferencia José → María Q500 en React</div>
+<div class="demo-item"><span class="n">3</span> 🧊 Ver el bloque nuevo en el Explorador</div>
+<div class="demo-item"><span class="n">4</span> 🧪 Simular ataque en Laboratorio y restaurar</div>
+</div>
+<div class="cta-big"><h3>🎬 DEMO TIME</h3><p style="font-weight:800;margin:10px 0">El programa habla por sí solo.<br>Preguntas al final ¡Sin pena!</p>
+<div style="background:#111;color:#fff;border-radius:12px;padding:12px;font-family:Orbitron;font-size:14px;margin-top:12px">bancochain-react :5173 ⚡ backend :8080</div>
+<p style="margin-top:12px;font-weight:700">Gracias • BancoChain 2026 🇬🇹</p></div>
+</div></div></section>
+
+</div>
+
+<div class="controls">
+  <div class="hint">← → para navegar • F pantalla completa • Hecho con 💙 en Guatemala</div>
+  <div class="dots" id="dots"></div>
+  <div class="nav"><button class="nbtn" onclick="prev()">←</button><button class="nbtn" onclick="next()">→</button></div>
+</div>
+
+<script>
+let cur=0; const slides=[...document.querySelectorAll('.slide')];
+document.getElementById('tot').textContent=String(slides.length).padStart(2,'0');
+document.getElementById('prog').style.width=(1/slides.length*100)+'%';
+const dotsBox=document.getElementById('dots');
+slides.forEach((_,i)=>{const d=document.createElement('button');d.className='dot'+(i===0?' on':'');d.onclick=()=>go(i);dotsBox.appendChild(d);});
+const dots=[...dotsBox.children];
+function go(i){
+  cur=(i+slides.length)%slides.length;
+  slides.forEach((s,k)=>s.classList.toggle('active',k===cur));
+  dots.forEach((d,k)=>d.classList.toggle('on',k===cur));
+  document.getElementById('cur').textContent=String(cur+1).padStart(2,'0');
+  document.getElementById('prog').style.width=((cur+1)/slides.length*100)+'%';
+}
+function next(){go(cur+1)} function prev(){go(cur-1)}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ')next();
+  if(e.key==='ArrowLeft')prev();
+  if(e.key.toLowerCase()==='f')document.documentElement.requestFullscreen?.();
+});
+// touch
+let sx=0;document.addEventListener('touchstart',e=>sx=e.touches[0].clientX);
+document.addEventListener('touchend',e=>{let dx=e.changedTouches[0].clientX-sx;if(dx<-50)next();if(dx>50)prev();});
+// stars canvas
+const c=document.getElementById('stars'),x=c.getContext('2d');let W,H,pts=[];
+function rs(){W=c.width=innerWidth;H=c.height=innerHeight;pts=Array.from({length:130},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.8+.3,s:Math.random()*.5+.15,o:Math.random()*.7+.2}))}
+rs();addEventListener('resize',rs);
+(function anim(){x.clearRect(0,0,W,H);for(const p of pts){p.y-=p.s;if(p.y<0)p.y=H;x.globalAlpha=p.o;x.fillStyle=p.r>1.2?'#00E6F6':'#fff';x.beginPath();x.arc(p.x,p.y,p.r,0,7);x.fill()}requestAnimationFrame(anim)})();
+</script>
+</body>
+</html>
